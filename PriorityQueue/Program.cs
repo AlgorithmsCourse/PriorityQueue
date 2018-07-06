@@ -18,29 +18,14 @@ namespace PriorityQueue
                 }
 
                 // delete and print each key
-                while (!pq.IsEmpty)
+                while (!pq.IsEmpty())
                 {
                     int i = pq.DelMin();
                     Console.WriteLine(i + " " + strings[i]);
                 }
                 Console.WriteLine();
 
-                ////// reinsert the same strings
-                ////for (int i = 0; i < strings.Length; i++)
-                ////{
-                ////    pq.Insert(i, strings[i]);
-                ////}
 
-                // print each key using the iterator
-                foreach (int i in pq)
-                {
-                    Console.WriteLine(i + " " + strings[i]);
-                }
-                while (!pq.IsEmpty)
-                {
-                    Console.WriteLine("Min k={0} at {1}", pq.MinKey, pq.MinIndex);
-                    Console.WriteLine("Removed {0}", pq.DelMin());
-                }
             
         }
     }

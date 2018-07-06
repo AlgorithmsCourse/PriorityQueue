@@ -24,9 +24,7 @@ namespace PriorityQueue
             {
                 _index[i] = -1;
             }
-
         }
-
         //client will need to check first if a key is already associated with k to determine call to Insert() or Change()
         public void Insert(int k, Key key)
         {
@@ -46,23 +44,44 @@ namespace PriorityQueue
         {
             //check if there is a parent; if k = 1, there is no parent
             // AND check if the value at K  is less than the value at the parent parent
-            while(k>1 && kIsLess(k, k/2))
+            while(k>1 && IsLess(k, k/2))
             {
-                var temp = _pq[k];
-                _pq[k] = _pq[k / 2];
-                _pq[k / 2] = temp;
-                _index[_pq[k]] = k;
-                _index[_pq[k/2]] = k/2;
+                Exch(k, k / 2);
                 k = k / 2;
             }
 
         }
 
+        private void Exch(int k, int l)
+        {
+            var temp = _pq[k];
+            _pq[k] = _pq[l];
+            _pq[l] = temp;
+            _index[_pq[k]] = k;
+            _index[_pq[l]] = l;
+        }
+        //call sink on value at index k
         private void Sink(int k)
         {
-            //make sure not to compare past N
+            //perform actions while k has at least 1 child
+            while (k * 2 <= N)
+            {
+                //set left child as the current known minumum
+                var minChild = k * 2;
+                //if left child is less than N, then right child exists;TRUE
+                //*AND* if right child is less than left child; TRUE. Set as minChild
+                if (k * 2 < N && IsLess(k * 2 + 1, k * 2))
+                {
+                    minChild = k * 2 + 1;
+                }
+                //if min child is less than parent k -- swap them
+                if(IsLess(k, minChild)) break;
+                Exch(k, minChild);
+                k = minChild;
+            }
         }
-        private bool kIsLess(int k, int l)
+        //returns true if k is less than l
+        private bool IsLess(int k, int l)
         {   //convert pq indexes k and k/2 to their comparable 'key' value
             var kVal = _keys[_pq[k]];
             var lVal = _keys[_pq[l]];
@@ -104,13 +123,13 @@ namespace PriorityQueue
             _pq[1] = _pq[N];
             _index[IdxMin] = -1;
 
-            Sink(_pq[1]);
+            Sink(1);
             
             N--;
             return IdxMin;
         }
 
-        public bool isEmpty() => N == 0;
+        public bool IsEmpty() => N == 0;
 
 
         int Size() => N;
